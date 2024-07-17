@@ -549,6 +549,11 @@
         document.documentElement.style.setProperty('--primary-color', appSettings.themeColor);
       }
     });
+            window.addEventListener('beforeunload', function (e) {
+            const confirmationMessage = '你有未儲存的變更，確定要離開此頁面嗎？';
+            e.returnValue = confirmationMessage; // Gecko and Trident
+            return confirmationMessage; // Gecko and WebKit
+        });
   </script>
 </body>
 </html>
