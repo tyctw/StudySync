@@ -1,0 +1,562 @@
+<html><head><title>StudySync - 智能讀書計畫</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --primary-color: #4a90e2;
+    --secondary-color: #50c878;
+    --background-color: #f0f4f8;
+    --text-color: #333;
+    --card-background: #ffffff;
+    --accent-color: #ff6b6b;
+    --success-color: #4caf50;
+    --warning-color: #ffa726;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    line-height: 1.6;
+    background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  h1, h2 {
+    color: var(--primary-color);
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .nav-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+    font-weight: 500;
+  }
+
+  .nav-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .card {
+    background-color: var(--card-background);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  label {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  input[type="time"],
+  input[type="number"],
+  select, textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  #planList {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .plan-item {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+  }
+
+  .plan-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .plan-item-content {
+    flex-grow: 1;
+  }
+
+  .plan-item-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .edit-btn, .delete-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+  }
+
+  .edit-btn {
+    background-color: var(--warning-color);
+    color: white;
+  }
+
+  .delete-btn {
+    background-color: var(--accent-color);
+    color: white;
+  }
+
+  .edit-btn:hover, .delete-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  #saveMessage {
+    display: none;
+    text-align: center;
+    color: var(--success-color);
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: rgba(76, 175, 80, 0.1);
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dark-mode {
+    --background-color: #1a1a1a;
+    --text-color: #f0f0f0;
+    --card-background: #2a2a2a;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px 10px;
+    }
+    
+    .card {
+      padding: 1.5rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+  }
+
+  .plan-item-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+
+  .plan-item-tag.subject {
+    background-color: #e0f7fa;
+    color: #006064;
+  }
+
+  .plan-item-tag.priority-high {
+    background-color: #ffebee;
+    color: #b71c1c;
+  }
+
+  .plan-item-tag.priority-medium {
+    background-color: #fff3e0;
+    color: #e65100;
+  }
+
+  .plan-item-tag.priority-low {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+  }
+
+  .calendar-view {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .calendar-day {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 10px;
+    min-height: 100px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .calendar-day-header {
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  .calendar-day-content {
+    font-size: 0.9rem;
+  }
+
+  .statistics {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+  }
+
+  .statistic-item {
+    text-align: center;
+  }
+
+  .statistic-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+  }
+
+  .statistic-label {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>StudySync<br><small style="font-size: 1.5rem; font-weight: 400;">智能讀書計畫</small></h1>
+    
+    <div class="nav-buttons">
+      <a href="index.html" class="nav-button">主頁</a>
+      <a href="timer.html" class="nav-button">學習時鐘</a>
+      <a href="pomodoro.html" class="nav-button">番茄鐘</a>
+      <a href="leaderboard.html" class="nav-button">排行榜</a>
+      <a href="timeline.html" class="nav-button">時間軸</a>
+      <a href="settings.html" class="nav-button">設定</a>
+    </div>
+
+    <div class="card">
+      <h2>新增讀書計畫</h2>
+      <form id="planForm">
+        <div class="form-group">
+          <label for="subject">科目</label>
+          <input type="text" id="subject" name="subject" required placeholder="例如：數學、英語、物理">
+        </div>
+        <div class="form-group">
+          <label for="topic">主題</label>
+          <input type="text" id="topic" name="topic" required placeholder="例如：微積分、文法、力學">
+        </div>
+        <div class="form-group">
+          <label for="date">日期</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+        <div class="form-group">
+          <label for="startTime">開始時間</label>
+          <input type="time" id="startTime" name="startTime" required>
+        </div>
+        <div class="form-group">
+          <label for="duration">持續時間（分鐘）</label>
+          <input type="number" id="duration" name="duration" min="5" max="480" required placeholder="建議：25-120分鐘">
+        </div>
+        <div class="form-group">
+          <label for="priority">優先級</label>
+          <select id="priority" name="priority" required>
+            <option value="high">高</option>
+            <option value="medium">中</option>
+            <option value="low">低</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="notes">備註</label>
+          <textarea id="notes" name="notes" placeholder="添加任何其他相關信息..."></textarea>
+        </div>
+        <button type="submit">新增計畫</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>我的讀書計畫</h2>
+      <ul id="planList"></ul>
+    </div>
+
+    <div class="card">
+      <h2>本週計畫概覽</h2>
+      <div class="calendar-view" id="calendarView"></div>
+    </div>
+
+    <div class="card">
+      <h2>學習統計</h2>
+      <div class="statistics">
+        <div class="statistic-item">
+          <div class="statistic-value" id="totalStudyTime">0</div>
+          <div class="statistic-label">總學習時間 (小時)</div>
+        </div>
+        <div class="statistic-item">
+          <div class="statistic-value" id="completedPlans">0</div>
+          <div class="statistic-label">已完成計畫數</div>
+        </div>
+        <div class="statistic-item">
+          <div class="statistic-value" id="averageStudyTime">0</div>
+          <div class="statistic-label">平均每日學習 (小時)</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="saveMessage">計畫已成功保存！</div>
+  </div>
+
+  <script>
+    let plans = JSON.parse(localStorage.getItem('studyPlans')) || [];
+    let editingIndex = -1;
+
+    function displayPlans() {
+      const planList = document.getElementById('planList');
+      planList.innerHTML = '';
+      plans.forEach((plan, index) => {
+        const li = document.createElement('li');
+        li.className = 'plan-item';
+        li.innerHTML = `
+          <div class="plan-item-content">
+            <h3 style="margin: 0 0 10px; color: var(--primary-color);">
+              <span class="plan-item-tag subject">${plan.subject}</span>
+              ${plan.topic}
+            </h3>
+            <p style="margin: 5px 0;">
+              <strong>日期：</strong>${plan.date} | <strong>時間：</strong>${plan.startTime} | <strong>持續：</strong>${plan.duration}分鐘
+            </p>
+            <p style="margin: 5px 0;">
+              <strong>優先級：</strong>
+              <span class="plan-item-tag priority-${plan.priority}">${getPriorityText(plan.priority)}</span>
+            </p>
+            <p style="margin: 5px 0;"><strong>備註：</strong>${plan.notes || '無'}</p>
+          </div>
+          <div class="plan-item-actions">
+            <button class="edit-btn" onclick="editPlan(${index})">編輯</button>
+            <button class="delete-btn" onclick="deletePlan(${index})">刪除</button>
+          </div>
+        `;
+        planList.appendChild(li);
+      });
+      updateCalendarView();
+      updateStatistics();
+    }
+
+    function getPriorityText(priority) {
+      switch(priority) {
+        case 'high': return '高';
+        case 'medium': return '中';
+        case 'low': return '低';
+        default: return priority;
+      }
+    }
+
+    function savePlan(e) {
+      e.preventDefault();
+      const form = document.getElementById('planForm');
+      const formData = new FormData(form);
+      const plan = Object.fromEntries(formData.entries());
+      
+      if (editingIndex === -1) {
+        plans.push(plan);
+      } else {
+        plans[editingIndex] = plan;
+        editingIndex = -1;
+      }
+
+      localStorage.setItem('studyPlans', JSON.stringify(plans));
+      form.reset();
+      displayPlans();
+      showSaveMessage();
+    }
+
+    function editPlan(index) {
+      const plan = plans[index];
+      document.getElementById('subject').value = plan.subject;
+      document.getElementById('topic').value = plan.topic;
+      document.getElementById('date').value = plan.date;
+      document.getElementById('startTime').value = plan.startTime;
+      document.getElementById('duration').value = plan.duration;
+      document.getElementById('priority').value = plan.priority;
+      document.getElementById('notes').value = plan.notes;
+      editingIndex = index;
+      document.querySelector('button[type="submit"]').textContent = '更新計畫';
+      document.querySelector('h2').textContent = '編輯讀書計畫';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deletePlan(index) {
+      if (confirm('確定要刪除這個讀書計畫嗎？')) {
+        plans.splice(index, 1);
+        localStorage.setItem('studyPlans', JSON.stringify(plans));
+        displayPlans();
+      }
+    }
+
+    function showSaveMessage() {
+      const saveMessage = document.getElementById('saveMessage');
+      saveMessage.style.display = 'block';
+      setTimeout(() => {
+        saveMessage.style.display = 'none';
+      }, 3000);
+    }
+
+    function updateCalendarView() {
+      const calendarView = document.getElementById('calendarView');
+      calendarView.innerHTML = '';
+
+      const today = new Date();
+      const startOfWeek = new Date(today);
+      startOfWeek.setDate(today.getDate() - today.getDay());
+
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(startOfWeek);
+        date.setDate(startOfWeek.getDate() + i);
+        
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'calendar-day';
+        dayDiv.innerHTML = `
+          <div class="calendar-day-header">${date.toLocaleDateString('zh-TW', { weekday: 'short' })}</div>
+          <div class="calendar-day-content"></div>
+        `;
+
+        const dayPlans = plans.filter(plan => new Date(plan.date).toDateString() === date.toDateString());
+        const contentDiv = dayDiv.querySelector('.calendar-day-content');
+        dayPlans.forEach(plan => {
+          contentDiv.innerHTML += `<div>${plan.subject}: ${plan.topic}</div>`;
+        });
+
+        calendarView.appendChild(dayDiv);
+      }
+    }
+
+    function updateStatistics() {
+      const totalStudyTime = plans.reduce((total, plan) => total + parseInt(plan.duration), 0) / 60;
+      const completedPlans = plans.length;
+      const averageStudyTime = totalStudyTime / 7; // Assuming weekly average
+
+      document.getElementById('totalStudyTime').textContent = totalStudyTime.toFixed(1);
+      document.getElementById('completedPlans').textContent = completedPlans;
+      document.getElementById('averageStudyTime').textContent = averageStudyTime.toFixed(1);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      displayPlans();
+      document.getElementById('planForm').addEventListener('submit', savePlan);
+
+      // 檢查深色模式設定
+      const appSettings = JSON.parse(localStorage.getItem('appSettings')) || {};
+      if (appSettings.darkMode) {
+        document.body.classList.add('dark-mode');
+      }
+
+      // 應用主題顏色
+      if (appSettings.themeColor) {
+        document.documentElement.style.setProperty('--primary-color', appSettings.themeColor);
+      }
+    });
+  </script>
+</body>
+</html>
